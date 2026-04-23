@@ -1,0 +1,13 @@
+# python virtual environment
+
+venv/
+.venv/
+
+# python binaries
+
+*.pyc
+
+# environment variables
+
+env
+.env
