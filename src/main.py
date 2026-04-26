@@ -16,10 +16,20 @@ client_secret = os.getenv("SPOTIFY_API_SECRET")
 BASE_URL = "https://api.spotify.com/"
 redirect_uri = 'http://127.0.0.1:5000/callback'
 
-def fetch_web_api(endpoint, token, method="GET", body=None):
+
+def fetch_top_tracks(token):
     headers = {
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json"
+    }
+    return requests.get(
+        url=BASE_URL + "v1/me/top/tracks?time_range=medium_term&limit=20",
+        headers=headers
+    ).json()
+
+def fetch_web_api(endpoint, token, method="GET", body=None):
+    headers = {
+        "Authorization": f"Bearer {token}"
     }
 
     url = BASE_URL + endpoint
@@ -37,7 +47,7 @@ def fetch_web_api(endpoint, token, method="GET", body=None):
 
 def authorize():
     state = "some long string"
-    scope = 'user-read-private user-read-email'
+    scope = 'user-follow-read user-follow-modify user-library-read user-library-modify user-top-read playlist-read-private playlist-modify-public playlist-modify-private'
     data_to_stringify = {
         "state": state,
         "scope": scope,
@@ -111,4 +121,10 @@ if __name__ == "__main__":
             ).decode()
         }
     )
-    print(response)
+    response_decoded = response.content.decode("utf-8", errors="replace")
+    
+    access_token = response.json().get("access_token")
+    refresh_token = response.json().get("refresh_token")
+
+    tracks = fetch_top_tracks(access_token)
+    print("Done")
