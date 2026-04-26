@@ -11,3 +11,11 @@ venv/
 
 env
 .env
+
+# local_persistance
+
+_local/
+
+# debugger
+
+.vscode/launch.json
