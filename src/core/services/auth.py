@@ -5,6 +5,7 @@ Currently support persistance for only one user.
 """
 
 import base64
+import logging
 import os
 import re
 import socket
@@ -18,6 +19,7 @@ client_id = os.getenv("CLIENT_ID")
 client_secret = os.getenv("SPOTIFY_API_SECRET")
 BASE_URL = "https://api.spotify.com/"
 redirect_uri = 'http://127.0.0.1:5000/callback'
+logger = logging.getLogger()
 
 class AuthService:
     def __init__(self):
@@ -33,7 +35,8 @@ class AuthService:
     def refresh_access_token(self):
         pass
 
-    def main_flow(self):
+    def main_flow(self) -> dict:
+        logger.info("Starting authentication flow")
         state = "some long string"
         scope = 'user-follow-read user-follow-modify user-library-read user-library-modify user-top-read playlist-read-private playlist-modify-public playlist-modify-private'
         data_to_stringify = {
@@ -48,6 +51,7 @@ class AuthService:
         HOST = '127.0.0.1'  # Localhost
         PORT = 5000
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            logger.info(f"Starting local server on {HOST}:{PORT} to receive Spotify callback")
             s.bind((HOST, PORT))  # Bind the socket to the port
             s.listen()            # Put the socket into listening mode
             print(f"Listening on {HOST}:{PORT}...")
@@ -63,7 +67,7 @@ class AuthService:
                     request_data += chunk
                     if b"\r\n\r\n" in request_data:
                         break
-
+                logger.info("Received callback from Spotify, processing request data")
                 http_request = request_data.decode("utf-8", errors="replace")
                 response_body = "OK"
                 http_response = (
@@ -82,7 +86,7 @@ class AuthService:
             raise
         code = re.search(r'code=([^&]+)', data).group(1)
         state = re.search(r'state=([^&]+)', data).group(1)
-        
+        logger.info("Received authorization code from Spotify callback")
         response = requests.request(
             method="POST",
             url='https://accounts.spotify.com/api/token',
@@ -100,4 +104,5 @@ class AuthService:
         )        
         access_token = response.json().get("access_token")
         refresh_token = response.json().get("refresh_token")
+        logger.info("Authentication flow completed successfully")
         return {"access_token": access_token, "refresh_token": refresh_token}
