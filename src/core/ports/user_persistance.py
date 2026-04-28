@@ -3,8 +3,9 @@ UserPersistance is responsible for handling all the user data related logic,
 currently supports persistance for only one user.
 """
 
+
 class UserPersistance:
-    
+
     def __init__(self):
         pass
 
@@ -13,4 +14,3 @@ class UserPersistance:
 
     def write_user_token(self, user_data, user_id="default_user"):
         pass
-
