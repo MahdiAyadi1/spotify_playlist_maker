@@ -1,7 +1,5 @@
 import logging
-
 import requests
-
 from adapters.local_user_persistance import LocalUserPersistance
 from core.services.auth import AuthService
 from core.services.spotify_playlist_service import (
@@ -12,12 +10,6 @@ from core.services.spotify_playlist_service import (
 from core.services.user import UserService
 
 logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-handler = logging.StreamHandler()
-formatter = logging.Formatter("[%(asctime)s] %(message)s")
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-logger.info("Logger initialized for requests library")
 
 
 class PlaylistMaker:
@@ -65,7 +57,3 @@ class PlaylistMaker:
             playlist_id=playlist_id, tracks_uris=tracks_uris
         )
 
-
-if __name__ == "__main__":
-    playlist_maker = PlaylistMaker()
-    playlist_maker.main()
