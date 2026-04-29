@@ -13,6 +13,7 @@ import webbrowser
 
 import requests
 
+from config import SCOPE
 from helper import stringify
 
 client_id = os.getenv("CLIENT_ID")
@@ -38,7 +39,7 @@ class AuthService:
     def main_flow(self) -> dict:
         logger.info("Starting authentication flow")
         state = "some long string"
-        scope = "user-follow-read user-follow-modify user-library-read user-library-modify user-top-read playlist-read-private playlist-modify-public playlist-modify-private"
+        scope = SCOPE
         data_to_stringify = {
             "state": state,
             "scope": scope,
@@ -108,3 +109,22 @@ class AuthService:
         refresh_token = response.json().get("refresh_token")
         logger.info("Authentication flow completed successfully")
         return {"access_token": access_token, "refresh_token": refresh_token}
+
+    def refresh_access_token(self, refresh_token: str) -> dict:
+        logger.info("Refreshing access token")
+        response = requests.request(
+            method="POST",
+            url="https://accounts.spotify.com/api/token",
+            data={
+                "grant_type": "refresh_token",
+                "refresh_token": refresh_token,
+            },
+            headers={
+                "content-type": "application/x-www-form-urlencoded",
+                "Authorization": "Basic "
+                + base64.b64encode(f"{client_id}:{client_secret}".encode()).decode(),
+            },
+        )
+        access_token = response.json().get("access_token")
+        logger.info("Access token refreshed successfully")
+        return {"access_token": access_token}

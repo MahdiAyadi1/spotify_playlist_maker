@@ -18,6 +18,8 @@ pip install -r requirements.txt
 
 ## Running the project
 
+Update the **config/playlist_param.yaml** before running
+
 Run the main script from the project folder:
 
 ```bash

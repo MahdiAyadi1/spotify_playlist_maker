@@ -5,4 +5,3 @@ set_up_logging()
 
 playlist_maker = PlaylistMaker()
 playlist_maker.main()
-

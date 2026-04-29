@@ -1,0 +1,6 @@
+playlist_name: "My top tracks long term" # Playlist name
+description: "Made using spotify playlist maker" # Playlist description
+public: False # True to make the playlist public ( it won't be added to your profile directly)
+time_range: long_term # long_term, medium_term or short_term
+limit: 10 # items in playlist, max 50
+offset: 0 # offset
