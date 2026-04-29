@@ -1,0 +1,4 @@
+requests
+pyyaml
+dotenv
+black           # for formatting
