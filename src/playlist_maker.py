@@ -24,7 +24,7 @@ class PlaylistMaker:
         with open("config/playlist_param.yaml", "r") as f:
             params = yaml.safe_load(f)
         logger.info("Fetched playlist parameters from config file")
-        self.playlist_name = params.get("name") or "My Tracks"
+        self.playlist_name = params.get("playlist_name") or "My Tracks"
         self.description = params.get("description") or ""
         self.public = params.get("public") or False
         self.time_range = params.get("time_range") or "long_term"
